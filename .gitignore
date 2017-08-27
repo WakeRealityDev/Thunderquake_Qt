@@ -37,3 +37,6 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
+
+# Compile RemGlk + Interpreter work folders
+remglk_desktop_src/

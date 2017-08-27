@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# (c) Copyright 2017 Stephen A. Gutknecht. All rights reserved.
+# License granted: Public Domain.
+#
 
 # Makefile for RemGlk discussion
 #   http://www.intfiction.org/forum/viewtopic.php?f=7&t=19868&start=10
@@ -15,8 +19,8 @@ build_directory_name="remglk_desktop_build"
 
 pwd
 # confirm the path is where we expect it to be for relative work
-if [ ! -f "Qt_Thunderquake_WR0.pro" ]; then
-  echo "!!!! ERROR_CODE:A00 expected Qt_Thunderquake_WR0.pro does not exist, aborting"
+if [ ! -f "Thunderquake_Qt_GitHub.pro" ]; then
+  echo "!!!! ERROR_CODE:A00 expected Thunderquake_Qt_GitHub.pro does not exist, aborting"
   exit 1
 else
   echo "!!!! Running from Thunderquake project folder"
