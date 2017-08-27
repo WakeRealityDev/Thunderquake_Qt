@@ -1,6 +1,8 @@
+﻿Slapped-together notes. NEEDS editing, proofreading.
+
 RemGlk far far away
 =======================
-The design of this app is that the RemGlk interactive fiction interperter ("engine") runs as another operating system process and stdin/stdout JSON is exchanged. This app is a JSON consumer and JSON emitter.
+The design of this app is that the RemGlk interactive fiction interpreter ("engine") runs as another operating system process and stdin/stdout JSON is exchanged. This app is a JSON consumer and JSON emitter.
 
 This is a very flexible design, as the classic IF engine is decoupled from the toolchain and can be remote or local - and there is absolutely no linking of any kind regarding software license conflicts or copyright concerns.
 
@@ -13,7 +15,7 @@ The base code of this app
 ===========================
 This app started from the Qt 5.9.1 example app for text-editor. It is a rich-text and subset of HTML QTextEdit.
 
-The assumption was that a rich text editor already knew how to do all the text formatting that Glk needs: change text colors, alignment of paragraphs, bold, undederline, font size changes, etc.
+The assumption was that a rich text editor already knew how to do all the text formatting that Glk needs: change text colors, alignment of paragraphs, bold, underline, font size changes, etc.
 
 This has proven, so far, to be a decent enough assumption. During development, it can be useful to re-enable all the toobar icons for the original text edit, do not define HIDE_TEXT_EDIT_TOOLBARS in .pro file.
 
@@ -34,10 +36,10 @@ State of this App code as a Glk front-end
 
 Essentially, here is a ToDo list of what needs to be added to make this a full fledge front-end app to RemGlk:
 
-1. Glk Timer suppot isn't complete. There is only a wisper of code to satisfy a timer response in the opening of the Glulx story "Six".
+1. Glk Timer support isn't complete. There is only a whisper of code to satisfy a timer response in the opening of the Glulx story "Six".
 2. Glk windows are not properly parsed into a maintained data structure. A simple object has been started to hold each window, but it isn't populated from the JSON and it isn't really referenced yet. Right now the code assumes "class Zork-like two-windows" of a main Glk TextBuffer and a Glk TextGrid for the top status line.  The logic will essentially merge multiple Glk TextBuffer windows into the main output.
 3. Glk style hints are not supported in RemGlk and nothing has been done to add that. This means colored text like in the Glulx story "Rover's Day Out" will not be colored.  There is some hacky code out there for Thunderword's fork of RemGlk to add style hints to the JSON output of RemGlk.
-4. Glk player input system needs work. autocomplete typing was experiemntal and can be annoying. The code needs an option to disable that autocomplete logic.
+4. Glk player input system needs work. autocomplete typing was experimental and can be annoying. The code needs an option to disable that autocomplete logic.
 5. Glk player input system does not track multiple Glk windows and only tracks if there is character or line input mode, or a combination of both.  If two windows have line input, or one window has line and another char, it does not know which window to send the input to when sending input back into RemGlk.  It blindly assumes one Glk TextBuffer window and sends the input to that.
 6. Glk hyperlinks are working in RemGlk but this code does not yet account for them. Code needs to be added to render them and to assign a handler to send clicks back into RemGlk.
 7. Clearing the screen (Glk TextBuffer window) probably doesn't work but that's pretty easy to do. Some stories will clear the screen after there Glk TextBuffer content after opening, find some examples to run that do that and add the logic.
@@ -80,8 +82,8 @@ Android
 All the technical side to compile the Qt app and run RemGlk on Android has been extensively tested and works great in testing.  However, worth mentioning some very obvious issues:
 
 1. What's missing is a lot of user-interface work.  For example: A QTextEdit scrolling presents a scroll-bar on the right in desktop PC fashion. It does not have normal Android app touch-screen scrolling.
-2. The HTML presentation of the File Open found story files is very flexible with different screen sizes. However, it's too tightly packed and it would be difficult to use a touch-screen to click the link without accidently hitting links on other lines of output.
-3. BUG: on arm device the TextEdit input system isn't working correctly? However, it works fine on the x86 Andoird 7.1.1 emulator with both soft and hard keyboard. why?
+2. The HTML presentation of the File Open found story files is very flexible with different screen sizes. However, it's too tightly packed and it would be difficult to use a touch-screen to click the link without accidentally hitting links on other lines of output.
+3. BUG: on arm device the TextEdit input system isn't working correctly? However, it works fine on the x86 Android 7.1.1 emulator with both soft and hard keyboard. why?
 
 
 Macintosh desktop / Apple iPhone / Windows desktop
