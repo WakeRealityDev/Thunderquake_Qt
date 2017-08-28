@@ -17,7 +17,7 @@ This app started from the Qt 5.9.1 example app for text-editor. It is a rich-tex
 
 The assumption was that a rich text editor already knew how to do all the text formatting that Glk needs: change text colors, alignment of paragraphs, bold, underline, font size changes, etc.
 
-This has proven, so far, to be a decent enough assumption. During development, it can be useful to re-enable all the toobar icons for the original text edit, do not define HIDE_TEXT_EDIT_TOOLBARS in .pro file.
+This has proven, so far, to be a decent enough assumption. During development, it can be useful to re-enable all the toobar icons for the original TextEdit example app, do not define HIDE_TEXT_EDIT_TOOLBARS in .pro file.
 
 
 Incomplete

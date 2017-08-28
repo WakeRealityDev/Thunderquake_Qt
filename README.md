@@ -14,7 +14,7 @@ To make a desktop app to run Glulxe interpreter stories:
 3. Open the Thunderquake_Qt_GitHub.pro file in Qt Creator
 4. Try to run on your desktop
 
-It should automatically scan your entire hard drive for .gblorb files for Glulx stories. Download some story files before you start the app. If the search does not work on your system, please ask for help and I can give some tips on revising the starting path logic.
+It should automatically scan your entire hard drive for .gblorb files for Glulx stories. Download some story files before you start the app. If the search does not work on your system, grep the code for "APPDEV_TEST_SETA" and please ask for help and I can give some tips on revising the starting path logic.
 
 The bash script in #2 is pretty simple, if you are on non-Linux system you can easily run these steps by hand.
 
