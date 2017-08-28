@@ -49,7 +49,7 @@ Essentially, here is a ToDo list of what needs to be added to make this a full f
 11. RemGlk's big absent feature is Glk sound. That's one area where contribution to RemGlk itself would be needed to add this Glk feature.  RemGlk already does a lot of what it needs to parse the BLORB file for graphics images and emit the JSON - in theory basic sound file support isn't a massive task.
 12. The 12 standard Glk text styles are not really recognized and accounted for.  Heading and subheading are kind of there, but really it needs to be fleshed out and other styles accounted for.
 13. Glk TextGrid support does have a primitive logic for multiple lines.  However, it doesn't account for RemGlk incremental frames (generations). If only 3 lines change of a 10 line TextGrid are revised - it doesn't have any concept of this. An array or QMap of the lines needs to be added and logic to update the proper index line. For development coding of this, a Z-machine interpreter bound to RemGlk with the stories Freefall/Tetris and Z-Racer are recommended.
-14. Glk text alignment and alignment isn't coded. Pretty rare to encounter stories that use this feature (or is it?).
+14. Glk text alignment and justification of text isn't coded. Pretty rare to encounter stories that use this feature (or is it?).
 15. Glk input in char mode special keystrokes such as cursor keys, ESC, F1..F12 function keys, etc. are not encoded into RemGlk's expectation. This can cause troubles with certain stories that expect those keys to be mapped, typically for menu systems.
 16. Relating to #10 - the RemGlkProcess QProcess - the current directory, the working directory, needs to be set to a sensible place such as the user's home folder to dump story data files. The Glulx story "Six" is an example of a story that creates data files that it loads on repeat plays.
 17. Relating to #8, a path can be sent to RemGlk via args that set the path it uses to reference image, sound, etc assets from blorb files.  This app, Thunderquake, will need to independently access those assets from the blorb file - as RemGlk does not currently have an option to extract them for consumer apps and expects that to be done independently.
@@ -95,4 +95,4 @@ Qt project / makefile system
 ===================================
 Unsolved issues:
 
-1. Unable to get the .pro file to understand anroid-arm vs. android-x86 as to which binary of the RemGlk engine app to bundle into the apk for Android builds.  remglkprocess.h has values of enginePickA set based on this need.
+1. Unable to get the .pro file to understand anroid-arm vs. android-x86 as to which binary of the RemGlk engine app to bundle into the APK for Android builds.  remglkprocess.h has values of enginePickA set based on this need.
