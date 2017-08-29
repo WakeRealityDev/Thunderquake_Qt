@@ -82,18 +82,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QMimeData>
-#if defined(QT_PRINTSUPPORT_LIB)
-#include <QtPrintSupport/qtprintsupportglobal.h>
-#if QT_CONFIG(printer)
-#if QT_CONFIG(printdialog)
-#include <QPrintDialog>
-#endif
-#include <QPrinter>
-#if QT_CONFIG(printpreviewdialog)
-#include <QPrintPreviewDialog>
-#endif
-#endif
-#endif
+
 
 #include <QTimer>
 #include <QProcess>
@@ -533,11 +522,11 @@ void RemGlkTextEditWindow::setupFormatActions()
     comboStyle->addItem("Ordered List (Roman lower)");
     comboStyle->addItem("Ordered List (Roman upper)");
 
-    connect(comboStyle, QOverload<int>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textStyle);
+    //connect(comboStyle, QOverload<int>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textStyle);
 
     comboFont = new QFontComboBox(appToolBarText);
     appToolBarText->addWidget(comboFont);
-    connect(comboFont, QOverload<const QString &>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textFamily);
+    //connect(comboFont, QOverload<const QString &>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textFamily);
 
     comboSize = new QComboBox(appToolBarText);
     comboSize->setObjectName("comboSize");
@@ -549,7 +538,7 @@ void RemGlkTextEditWindow::setupFormatActions()
         comboSize->addItem(QString::number(size));
     comboSize->setCurrentIndex(standardSizes.indexOf(QApplication::font().pointSize()));
 
-    connect(comboSize, QOverload<const QString &>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textSize);
+    //connect(comboSize, QOverload<const QString &>::of(&QComboBox::activated), this, &RemGlkTextEditWindow::textSize);
 }
 
 void RemGlkTextEditWindow::setupInteractiveFictionActions()
@@ -732,57 +721,23 @@ bool RemGlkTextEditWindow::fileSaveAs()
 
 void RemGlkTextEditWindow::filePrint()
 {
-#if QT_CONFIG(printdialog)
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintDialog *dlg = new QPrintDialog(&printer, this);
-    if (textEdit->textCursor().hasSelection())
-        dlg->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-    dlg->setWindowTitle(tr("Print Document"));
-    if (dlg->exec() == QDialog::Accepted)
-        textEdit->print(&printer);
-    delete dlg;
-#endif
+
 }
 
 void RemGlkTextEditWindow::filePrintPreview()
 {
-#if QT_CONFIG(printpreviewdialog)
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, &RemGlkTextEditWindow::printPreview);
-    preview.exec();
-#endif
+
 }
 
 void RemGlkTextEditWindow::printPreview(QPrinter *printer)
 {
-#ifdef QT_NO_PRINTER
-    Q_UNUSED(printer);
-#else
-    textEdit->print(printer);
-#endif
+
 }
 
 
 void RemGlkTextEditWindow::filePrintPdf()
 {
-#ifndef QT_NO_PRINTER
-//! [0]
-    QFileDialog fileDialog(this, tr("Export PDF"));
-    fileDialog.setAcceptMode(QFileDialog::AcceptSave);
-    fileDialog.setMimeTypeFilters(QStringList("application/pdf"));
-    fileDialog.setDefaultSuffix("pdf");
-    if (fileDialog.exec() != QDialog::Accepted)
-        return;
-    QString fileName = fileDialog.selectedFiles().first();
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOutputFileName(fileName);
-    textEdit->document()->print(&printer);
-    statusBar()->showMessage(tr("Exported \"%1\"")
-                             .arg(QDir::toNativeSeparators(fileName)));
-//! [0]
-#endif
+
 }
 
 void RemGlkTextEditWindow::textBold()
