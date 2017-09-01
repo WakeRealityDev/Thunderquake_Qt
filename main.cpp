@@ -59,6 +59,8 @@
 #include <QCommandLineOption>
 #include <QDebug>
 
+
+
 /*
  * ToDo:
  *    Ubuntu lacks icon for app
@@ -90,7 +92,8 @@ int main(int argc, char *argv[])
         qDebug() << "main() non-Android screen sizing path";
 
         /*
-         * Code very poorly deals with 3x4k monitor config and tosses window off screen.
+         * Code very poorly deals with 3x4k monitor config and tosses window off screen (none of the 3 heads).
+         * This problem exists in the Qt 5.9.1 official example Text Edit app and several other examples.
          * ToDo: fix
         */
         // const QRect availableGeometry = QApplication::desktop()->availableGeometry(&mw);

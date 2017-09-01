@@ -15,6 +15,8 @@
 #include <QTextEdit>
 
 #include <remglkoutputlayout.h>
+#include "document.h"
+#include "webviewwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -53,6 +55,7 @@ public slots:
     void processRemGlkStanza(QJsonObject incomingStanza);
     void stanzaRemGlkInput(QJsonArray input);
     void stanzaRemGlkTimer(QJsonValue timer);
+    void setRemGlkInitMessage(QString payload);
 
     void storyRespondTimer();
     void storyRespond(const QString storyInput);
@@ -65,8 +68,14 @@ public:
     // assistant/remotecontrol.cpp
     QProcess *process;
 
+    // ToDo: array of multiple RemGlk "plugin" pipe apps and a sequence number for them
+    QProcess *pluginProcess;
+
     RemGlkCompleterTextEdit *textEdit;
     //RemGlkOutputLayout outputLayout;
+    WebViewWindow *webViewWindow;
+
+    QString remGlkInitMessage = "";
 
 protected:
     //
@@ -88,6 +97,7 @@ public:
 
 protected:
 
+    int frontEndMode = 1;
     int engineInputMode = -1;
     int engineInputCharGen = -1;
     int engineInputLineGen = -1;
@@ -117,6 +127,9 @@ public:
 #else
     int enginePickA = 0;
 #endif
+
+signals:
+    void incomingRemGlkStanzaReady(const QString);
 };
 
 #endif // REMGLKPROCESS_H

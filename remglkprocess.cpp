@@ -26,12 +26,22 @@ RemGlkProcess::RemGlkProcess(QObject *parent, RemGlkCompleterTextEdit *textEditO
 {
     qDebug() << "---! RemGlkProcess constructor";
     textEdit = textEditOutput;
+    remGlkInitMessage = "{ \"type\": \"init\", \"gen\": 0, \"metrics\": { \"width\":720, \"height\":400, \"charwidth\":9, \"charheight\":16 }, \"support\": [ \"timer\", \"hyperlinks\", \"graphics\", \"graphicswin\" ] }";
+
+    // does this init cause deadlock?
+    //   {"type":"init","gen":0, "metrics":{"width":0,"height":0,"gridcharheight":16,"gridcharwidth":8.375,"gridmarginx":20,"gridmarginy":12,"buffercharheight":16,"buffercharwidth":7.5,"buffermarginx":35,"buffermarginy":12,"graphicsmarginx":0,"graphicsmarginy":0,"outspacingx":0,"outspacingy":0,"inspacingx":0,"inspacingy":0}, "support":["timer","graphics","graphicswin","hyperlinks"]}
 }
 
 void RemGlkProcess::setOutputTextEdit(RemGlkCompleterTextEdit *textEditOutput)
 {
     textEdit = textEditOutput;
     // outputLayout.textEdit = textEditOutput;
+}
+
+void RemGlkProcess::setRemGlkInitMessage(QString payload)
+{
+    remGlkInitMessage = payload;
+    qDebug() << ":::::::: set RemGlk INIT " << payload;
 }
 
 
@@ -177,19 +187,27 @@ void RemGlkProcess::launchRemGlkEngineGo()
 
     // RemGlk Initialize the screen layout and features support.
     // ToDo: create a class to hold screen choice parameters. Create user interface to allow fixed-size selection. Measure dynamic size of window and offer as an option.
-    sendCommand(QLatin1String("{ \"type\": \"init\", \"gen\": 0, \"metrics\": { \"width\":720, \"height\":400, \"charwidth\":9, \"charheight\":16 }, \"support\": [ \"timer\", \"hyperlinks\", \"graphics\", \"graphicswin\" ] }"));
+    sendCommand(remGlkInitMessage);
 }
 
 
 void RemGlkProcess::sendCommand(const QString &cmd)
 {
-    if (process->state() != QProcess::Running)
+    if (storyEngineState < 1) {
+        qDebug() << "[DataToEngine] PROBLEM!!!!!!!!!!!! process not yet created, storyEngineState " << storyEngineState;
         return;
-    qDebug() << "[DataToEngine] " << cmd;
+    }
+    if (process->state() != QProcess::Running) {
+        qDebug() << "[DataToEngine] PROBLEM!!!!!!!!!!!! process state not ready.";
+        return;
+    }
+    qDebug() << "[DataToEngine][SpotDS0] " << cmd;
+// ToDo: revisit this, as "local" may not be good for Unicode
     process->write(cmd.toLocal8Bit() + '\n');
     if (remGlkDebug_process_steps) {
         textEdit->append("\n:::: command sent");
     }
+    qDebug() << "[DataToEngine] after send";
 }
 
 void RemGlkProcess::storyRespondTimer() {
@@ -248,6 +266,7 @@ void RemGlkProcess::processStateChange(const QProcess::ProcessState newState)
 
 void RemGlkProcess::engineProcessClosed()
 {
+    qDebug() << "engineProcessClosed";
     textEdit->append(QString("\n:::: QProcess <b>closed</b> %1 %2").arg(QString::number(process->exitCode())).arg(QString::number(process->exitStatus())));
     storyEngineState = 4;
 }
@@ -455,7 +474,19 @@ void RemGlkProcess::processStandardOutputFromRemGlk()
                     }
 
                     incomingRemGlkStanzaCount++;
-                    processRemGlkStanza(jsonObject);
+                    // Which front-end rendering solution for this assembled RemGlk JSON stanza?
+                    switch (frontEndMode) {
+                    case 0:
+                        processRemGlkStanza(jsonObject);
+                        break;
+                    case 1:
+                        // webViewWindow->incomingRemGlkStanza(assembledText);
+                        emit incomingRemGlkStanzaReady(assembledText);
+                        break;
+                    case 2:
+                        qDebug() << "!!!!!!!!!!!!!!!!! DOING NOTHING SPOT_REMGLK_AAAAA0 !!!!!!!!!!!!!!\n" << assembledText;
+                        break;
+                    }
 
                 } else {
                     qDebug() << "ERROR: not JSONObject";

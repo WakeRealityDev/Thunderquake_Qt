@@ -75,9 +75,7 @@ class QGridLayout;
 QT_END_NAMESPACE
 
 #include "completerwindow.h"
-#include "remglkprocess.h"
-#include "findfileswindow.h"
-#include "findstorieswindow.h"
+#include "datamiddlespot.h"
 
 QT_BEGIN_NAMESPACE
 class RemGlkProcess;
@@ -183,9 +181,8 @@ private:
      * Thunderquake changes
      */
 public:
-    RemGlkProcess engineProcess;
-    FindFilesWindow findFilesWindow;
-    FindStoriesWindow findStoriesWindow;
+    DataMiddleSpot dataSpot;
+
     int windowOpenAutoLaunchMode = 0;
     QGridLayout *mainLayout;
     // Classic Glk window for status, as in Z-machine top status window.
@@ -201,6 +198,7 @@ public slots:
     void storyRespondCall();
     void storyResponseFromTextEdit(QString dataPayload, int inputMode);
     void loadDataFilePicked(QString dataFilePath);
+    void proxyRemGlkForward(const QString payload, int payloadType);
 };
 
 #endif // REMGLKTEXTEDITWINDOW_H

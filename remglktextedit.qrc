@@ -40,6 +40,21 @@
         <file>images/win/zoomin.png</file>
         <file>images/win/zoomout.png</file>
         <file>example.html</file>
+        <file>GlkOte/dialog.css</file>
+        <file>GlkOte/gi_debug.css</file>
+        <file>GlkOte/gi_debug.js</file>
+        <file>GlkOte/glkote.css</file>
+        <file>GlkOte/glkote.js</file>
+        <file>GlkOte/jquery-1.12.4.min.js</file>
+        <file>GlkOte/namedialog.js</file>
+        <file>GlkOte/play-repeat.js</file>
+        <file>GlkOte/play.js</file>
+        <file>GlkOte/playws.js</file>
+        <file>GlkOte/sample-demo.js</file>
+        <file>GlkOte/waiting.gif</file>
+        <file>GlkOte/play_if_remote.html</file>
+        <file>default.md</file>
+        <file>GlkOte/qwebchannel.js</file>
     </qresource>
     <qresource prefix="/resources">
         <file>wordlist.txt</file>

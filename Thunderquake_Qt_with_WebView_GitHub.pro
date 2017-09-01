@@ -1,5 +1,7 @@
-QT += widgets
+QT += widgets webenginewidgets webchannel
 qtHaveModule(printsupport): QT += printsupport
+
+CONFIG += c++11
 
 TEMPLATE        = app
 TARGET          = Thunderquake_Qt
@@ -34,7 +36,10 @@ HEADERS         = \
     findfilesthread.h \
     glkwindowdata.h \
     outputstyledchunk.h \
-    findstorieswindow.h
+    findstorieswindow.h \
+    datamiddlespot.h \
+    webviewwindow.h \
+    webviewpage.h
 SOURCES         = \
     remglkprocess.cpp \
     main.cpp \
@@ -48,7 +53,10 @@ SOURCES         = \
     findfilesthread.cpp \
     glkwindowdata.cpp \
     outputstyledchunk.cpp \
-    findstorieswindow.cpp
+    findstorieswindow.cpp \
+    datamiddlespot.cpp \
+    webviewwindow.cpp \
+    webviewpage.cpp
 
 RESOURCES += \
     remglktextedit.qrc
@@ -56,6 +64,21 @@ RESOURCES += \
 # Example customcompleter
 HEADERS   +=
 SOURCES   +=
+
+
+# Example Markdown Editor
+HEADERS += \
+    document.h
+
+#     main.cpp \
+SOURCES += \
+    document.cpp
+
+
+FORMS += \
+    mainwindow.ui
+
+#
 
 build_all:!build_pass {
     CONFIG -= build_all

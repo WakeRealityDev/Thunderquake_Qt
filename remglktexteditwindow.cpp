@@ -169,7 +169,7 @@ RemGlkTextEditWindow::RemGlkTextEditWindow(QWidget *parent)
     textEdit->setFocus();
     setCurrentFileName(QString());
 
-    engineProcess.setOutputTextEdit(textEdit);
+    dataSpot.engineProcess.setOutputTextEdit(textEdit);
 
     // reference:
     //     connect(comboStoryResponse->lineEdit(), SIGNAL(returnPressed()), this, SLOT(storyRespondCall()));
@@ -218,20 +218,20 @@ RemGlkTextEditWindow::RemGlkTextEditWindow(QWidget *parent)
     case 0:
         // findFilesWindow.show();
         // find function is designed to populare without showing window, pre-loading content.
-        findFilesWindow.find();
-        connect(&findFilesWindow, SIGNAL(dataFilePicked(QString)), this, SLOT(loadDataFilePicked(QString)));
+        dataSpot.findFilesWindow.find();
+        connect(&dataSpot.findFilesWindow, SIGNAL(dataFilePicked(QString)), this, SLOT(loadDataFilePicked(QString)));
         break;
     case 1:
-        findStoriesWindow.find();
-        connect(&findStoriesWindow, SIGNAL(dataFilePicked(QString)), this, SLOT(loadDataFilePicked(QString)));
+        dataSpot.findStoriesWindow.find();
+        connect(&dataSpot.findStoriesWindow, SIGNAL(dataFilePicked(QString)), this, SLOT(loadDataFilePicked(QString)));
         break;
     }
 
     if (windowOpenAutoLaunchMode == 1) {
         QTimer::singleShot(500, [=] {
-                engineProcess.setDataFilePath("/spot/CameraCornetGit0/textAdvent/storyGames/storyGames_TechTest0/Six.gblorb");
-                engineProcess.setRemGlkEngine(1);
-                engineProcess.launchRemGlkEngine();
+                dataSpot.engineProcess.setDataFilePath("/spot/CameraCornetGit0/textAdvent/storyGames/storyGames_TechTest0/Six.gblorb");
+                dataSpot.engineProcess.setRemGlkEngine(1);
+                dataSpot.engineProcess.launchRemGlkEngine();
             });
     }
 
@@ -252,8 +252,27 @@ RemGlkTextEditWindow::RemGlkTextEditWindow(QWidget *parent)
     appToolBarText->hide();
     appToolBarFormat->hide();
 #endif
+
+    // connect(&dataSpot.webViewWindow, SIGNAL(toRemGlkEngineForward(const QString, int)), &dataSpot.engineProcess, SLOT(sendCommand(const QString)));
+    connect(&dataSpot.webViewWindow, SIGNAL(toRemGlkEngineForward(const QString, int)), this, SLOT(proxyRemGlkForward(const QString, int)));
+
+    connect(&dataSpot.engineProcess, SIGNAL(incomingRemGlkStanzaReady(QString)), &dataSpot.webViewWindow, SLOT(incomingRemGlkStanza(QString)));
 }
 
+int onForward = 0;
+
+void RemGlkTextEditWindow::proxyRemGlkForward(const QString payload, int payloadType) {
+    onForward++;
+    qDebug() << "[DataToEngine][tempFoward] Payload " << payload << " type " << payloadType << " onForward " << onForward;
+    switch (payloadType) {
+    case 0:   // Regular RemGlk generations, story turns
+        dataSpot.engineProcess.sendCommand(payload);
+        break;
+    case 1:   // Init string and other special
+        dataSpot.engineProcess.setRemGlkInitMessage(payload);
+        break;
+    }
+}
 
 void RemGlkTextEditWindow::addExtraWindowElements()
 {
@@ -291,17 +310,17 @@ void RemGlkTextEditWindow::addExtraWindowElements()
         // mainLayout->setSizeConstraint(QLayout::SetMinimumSize);
         mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
 
-        engineProcess.outputLayout.setOutputWidgets(textEdit, mainLayout, glkWindowTopStatus);
+        dataSpot.engineProcess.outputLayout.setOutputWidgets(textEdit, mainLayout, glkWindowTopStatus);
     }
 }
 
 void RemGlkTextEditWindow::loadDataFilePicked(QString dataFilePath)
 {
     bool doLaunch = false;
-    if (engineProcess.storyEngineState > 0) {
+    if (dataSpot.engineProcess.storyEngineState > 0) {
         if (maybeSave()) {
             qDebug() << "!!!!!!!!!!!!!!! Confirmation dialog on close";
-            engineProcess.stopRunningEngine();
+            dataSpot.engineProcess.stopRunningEngine();
             doLaunch = true;
         }
     }
@@ -310,9 +329,9 @@ void RemGlkTextEditWindow::loadDataFilePicked(QString dataFilePath)
     }
 
     if (doLaunch) {
-        engineProcess.setDataFilePath(dataFilePath);
-        engineProcess.setRemGlkEngine(1);
-        engineProcess.launchRemGlkEngine();
+        dataSpot.engineProcess.setDataFilePath(dataFilePath);
+        dataSpot.engineProcess.setRemGlkEngine(1);
+        dataSpot.engineProcess.launchRemGlkEngine();
     }
 }
 
@@ -323,10 +342,10 @@ void RemGlkTextEditWindow::storyResponseFromTextEdit(QString dataPayload, int in
     case 1:   // line only
     case 3:   // line + char. ToDo: currently defaults to LINE, ignoring char mode
     case 5:   // line + HyperLink
-        engineProcess.storyRespond(dataPayload);
+        dataSpot.engineProcess.storyRespond(dataPayload);
         break;
     case 2:   // char only
-        engineProcess.storyRespondChar(dataPayload);
+        dataSpot.engineProcess.storyRespondChar(dataPayload);
         break;
     }
 }
@@ -596,7 +615,7 @@ void RemGlkTextEditWindow::setupInteractiveFictionActions()
 
 void RemGlkTextEditWindow::storyRespondCall()
 {
-    engineProcess.storyRespond(comboStoryResponse->currentText());
+    dataSpot.engineProcess.storyRespond(comboStoryResponse->currentText());
 }
 
 
@@ -661,7 +680,7 @@ void RemGlkTextEditWindow::fileNew()
     if (maybeSave()) {
         textEdit->clear();
         setCurrentFileName(QString());
-        engineProcess.stopRunningEngine();
+        dataSpot.engineProcess.stopRunningEngine();
     }
 }
 
@@ -686,10 +705,10 @@ void RemGlkTextEditWindow::fileOpen()
     case 1:
         switch (findFilesMethod) {
         case 0:
-            findFilesWindow.show();
+            dataSpot.findFilesWindow.show();
             break;
         case 1:
-            findStoriesWindow.show();
+            dataSpot.findStoriesWindow.show();
             break;
         }
         break;

@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>index.html</file>
+        <file>qwebchannel.js</file>
+        <file>marked.min.js</file>
+        <file>default.md</file>
+        <file>markdown.css</file>
+        <file>dialog.css</file>
+        <file>gi_debug.css</file>
+        <file>gi_debug.js</file>
+        <file>glkote.css</file>
+        <file>glkote.js</file>
+        <file>jquery-1.12.4.min.js</file>
+        <file>namedialog.js</file>
+        <file>play-repeat.js</file>
+        <file>play.js</file>
+        <file>playws.js</file>
+        <file>sample-demo.js</file>
+        <file>waiting.gif</file>
+        <file>play_if_remote.html</file>
+    </qresource>
+</RCC>
